@@ -26,13 +26,37 @@ export default async function (req, res) {
   }
 
   try {
+    // console.log('animal?', animal);
+    // OUTPUT: "cat" (sample input send from frontend)
+
+
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: generatePrompt(animal),
       temperature: 0.6,
     });
+    // console.log('completion?', completion.data.choices);
+    /* OUTPUT:
+       =======
+      {
+        warning: 'This model version is deprecated. Migrate before January 4, 2024 to avoid disruption of service. Learn more https://platform.openai.com/docs/deprecations',
+        id: 'cmpl-7vLSyEUaGJOLnlM6EXx7p2J3HQRxe',
+        object: 'text_completion',
+        created: 1693901568,
+        model: 'text-davinci-003',
+        choices: [
+          {
+            text: ' Super Whiskers, Furry Fury, The Mighty Tabby',
+            index: 0,
+            logprobs: null,
+            finish_reason: 'stop'
+          }
+        ],
+        usage: { prompt_tokens: 61, completion_tokens: 10, total_tokens: 71 }
+      }
+     */
     res.status(200).json({ result: completion.data.choices[0].text });
-  } catch(error) {
+  } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
       console.error(error.response.status, error.response.data);
